@@ -11,7 +11,11 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Cart::content();
-        return view('cart.index', compact('cartItems'));
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->price * $item->qty;
+        }
+        return view('cart.index', compact('cartItems', 'total'));
     }
 
     public function add(Request $request, $id)
@@ -23,7 +27,9 @@ class CartController extends Controller
             'name' => $product->name,
             'qty' => $request->quantity ?? 1,
             'price' => $product->price,
-            'options' => ['image' => $product->images->first()->image_path ?? null]
+            'options' => [
+                'image' => $product->images->first()->image_path ?? $product->image ?? null
+            ]
         ]);
 
         return redirect()->route('cart.index')->with('success', 'Đã thêm vào giỏ hàng!');

@@ -100,7 +100,7 @@
                                     <div class="col-md-6">
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Tạm tính:</span>
-                                            <span>{{ number_format(Cart::subtotal()) }}đ</span>
+                                            <span>{{ number_format($total) }}đ</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Phí vận chuyển:</span>
@@ -109,7 +109,7 @@
                                         <hr>
                                         <div class="d-flex justify-content-between">
                                             <strong>Tổng cộng:</strong>
-                                            <strong class="text-primary">{{ number_format(Cart::total()) }}đ</strong>
+                                            <strong class="text-primary">{{ number_format($total) }}đ</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -136,3 +136,4 @@
     </div>
 </div>
 @endsection
+

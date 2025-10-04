@@ -17,7 +17,11 @@ class OrderController extends Controller
         if ($cartItems->count() == 0) {
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
         }
-        return view('orders.create', compact('cartItems'));
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->price * $item->qty;
+        }
+        return view('orders.create', compact('cartItems', 'total'));
     }
 
     // Lưu đơn hàng
@@ -28,10 +32,16 @@ class OrderController extends Controller
             'phone' => 'required',
         ]);
 
+        // Tính tổng tiền
+        $total = 0;
+        foreach(Cart::content() as $item) {
+            $total += $item->price * $item->qty;
+        }
+
         // Tạo đơn hàng
         $order = Order::create([
             'user_id' => Auth::id(),
-            'total_price' => Cart::total(),
+            'total_price' => $total,
             'status' => 'pending',
             'shipping_address' => $request->shipping_address,
             'phone' => $request->phone,
