@@ -66,7 +66,10 @@ class OrderController extends Controller
     // Hiển thị danh sách đơn hàng của user
     public function index()
     {
-        $orders = Order::where('user_id', Auth::id())->latest()->get();
+        $orders = Order::where('user_id', auth()->id())
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(10); // Phân trang 10 đơn hàng mỗi trang
+        
         return view('orders.index', compact('orders'));
     }
 
@@ -75,5 +78,16 @@ class OrderController extends Controller
     {
         $this->authorize('view', $order); // chỉ cho phép user xem đơn của chính mình
         return view('orders.show', compact('order'));
+    }
+
+    public function destroy(Order $order)
+    {
+        // Kiểm tra quyền xóa đơn hàng
+        if($order->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Không có quyền xóa đơn hàng này!');
+        }
+        
+        $order->delete();
+        return redirect()->route('orders.index')->with('success', 'Đã xóa đơn hàng thành công!');
     }
 }

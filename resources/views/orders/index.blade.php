@@ -76,7 +76,7 @@
                 <!-- Pagination -->
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-center">
-                        {{ $orders->links() }}
+                        {{ $orders->links() }}  {{-- Đảm bảo $orders là instance của LengthAwarePaginator --}}
                     </div>
                 </div>
             @else
